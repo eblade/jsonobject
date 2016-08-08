@@ -24,6 +24,10 @@ Installation
 
 This repository can be installed with ``pip``.
 
+.. code-block:: bash
+
+    pip install https://github.com/eblade/jsonobject/archive/v1.0.tar.gz
+
 Example
 -------
 
