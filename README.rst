@@ -51,20 +51,98 @@ Example
 
     >>> volvo = Car(brand='Volvo', model='V70', rating=Rating.good)
     >>> volvo.to_json()
-    '{\n  "*schema": "Car",\n  "brand": "Volvo",\n  "model": "V70",\n  "rating": "good",\n  "wheels": []\n}'
+    {
+        "*schema": "Car",
+        "brand": "Volvo",
+        "model": "V70",
+        "rating": "good",
+        "wheels": []
+    }
     >>> volvo.wheels.append(Wheel(diameter=2.))
     >>> volvo.to_json()
-    '{\n  "*schema": "Car",\n  "brand": "Volvo",\n  "model": "V70",\n  "rating": "good",\n  "wheels": [\n    {\n      "*schema": "Wheel",\n      "diameter": 2.0\n    }\n  ]\n}'
+    {  
+        "*schema": "Car",
+        "brand": "Volvo",
+        "model": "V70",
+        "rating": "good",
+        "wheels": [
+            {
+                "*schema": "Wheel",
+                "diameter": 2.0
+            }
+        ]
+    }
     >>> volvo.wheels.append(Wheel(diameter=2.))
     >>> volvo.to_json()
-    '{\n  "*schema": "Car",\n  "brand": "Volvo",\n  "model": "V70",\n  "rating": "good",\n  "wheels": [\n    {\n      "*schema": "Wheel",\n      "diameter": 2.0\n    },\n    {\n      "*schema": "Wheel",\n      "diameter": 2.0\n    }\n  ]\n}'
+    {
+        "*schema": "Car",
+        "brand": "Volvo",
+        "model": "V70",
+        "rating": "good",
+        "wheels": [
+            {
+                "*schema": "Wheel",
+                "diameter": 2.0
+            },
+            {
+                "*schema": "Wheel",
+                "diameter": 2.0
+            }
+        ]
+    }
     >>> volvo.wheels.append(Wheel(diameter=2.))
-    >>> volvo.wheels.append(Wheel(diameter=2.))
+    >>> volvo.wheels.append(Wheel())  # using default value here
     >>> volvo.to_json()
-    '{\n  "*schema": "Car",\n  "brand": "Volvo",\n  "model": "V70",\n  "rating": "good",\n  "wheels": [\n    {\n      "*schema": "Wheel",\n      "diameter": 2.0\n    },\n    {\n      "*schema": "Wheel",\n      "diameter": 2.0\n    },\n    {\n      "*schema": "Wheel",\n      "diameter": 2.0\n    },\n    {\n      "*schema": "Wheel",\n      "diameter": 2.0\n    }\n  ]\n}'
+    {
+        "*schema": "Car",
+        "brand": "Volvo",
+        "model": "V70",
+        "rating": "good",
+        "wheels": [
+            {
+                "*schema": "Wheel",
+                "diameter": 2.0
+            },
+            {
+                "*schema": "Wheel",
+                "diameter": 2.0
+            },
+            {
+                "*schema": "Wheel",
+                "diameter": 2.0
+            },
+            {
+                "*schema": "Wheel",
+                "diameter": 1.0
+            }
+       ]
+    }
     >>> volvo2 = Car.FromJSON(volvo.to_json())
     >>> volvo2.to_json()
-    '{\n  "*schema": "Car",\n  "brand": "Volvo",\n  "model": "V70",\n  "rating": "good",\n  "wheels": [\n    {\n      "*schema": "Wheel",\n      "diameter": 2.0\n    },\n    {\n      "*schema": "Wheel",\n      "diameter": 2.0\n    },\n    {\n      "*schema": "Wheel",\n      "diameter": 2.0\n    },\n    {\n      "*schema": "Wheel",\n      "diameter": 2.0\n    }\n  ]\n}'
+    {
+        "*schema": "Car",
+        "brand": "Volvo",
+        "model": "V70",
+        "rating": "good",
+        "wheels": [
+            {
+                "*schema": "Wheel",
+                "diameter": 2.0
+            },
+            {
+                "*schema": "Wheel",
+                "diameter": 2.0
+            },
+            {
+                "*schema": "Wheel",
+                "diameter": 2.0
+            },
+            {
+                "*schema": "Wheel",
+                "diameter": 1.0
+            }
+        ]
+    }
 
 Author
 ------
