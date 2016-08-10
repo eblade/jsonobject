@@ -31,9 +31,11 @@ This repository can be installed with ``pip``.
 Example
 -------
 
-.. code-block:: python
+.. testsetup:: *
 
     from jsonobject import Property, PropertySet, EnumProperty
+
+.. testcode:: python
 
     class Wheel(PropertySet):
         diameter = Property(float, default=1.)
@@ -49,8 +51,13 @@ Example
         model = Property()
         rating = Property(enum=Rating, default=Rating.ok)
 
-    >>> volvo = Car(brand='Volvo', model='V70', rating=Rating.good)
-    >>> volvo.to_json()
+.. testcode::
+
+    volvo = Car(brand='Volvo', model='V70', rating=Rating.good)
+    print(volvo.to_json())
+
+.. testoutput::
+
     {
         "*schema": "Car",
         "brand": "Volvo",
@@ -58,8 +65,14 @@ Example
         "rating": "good",
         "wheels": []
     }
-    >>> volvo.wheels.append(Wheel(diameter=2.))
-    >>> volvo.to_json()
+
+.. testcode::
+
+    volvo.wheels.append(Wheel(diameter=2.))
+    print(volvo.to_json())
+
+.. testoutput::
+
     {  
         "*schema": "Car",
         "brand": "Volvo",
@@ -72,8 +85,14 @@ Example
             }
         ]
     }
-    >>> volvo.wheels.append(Wheel(diameter=2.))
-    >>> volvo.to_json()
+
+.. testcode::
+
+    volvo.wheels.append(Wheel(diameter=2.))
+    volvo.to_json()
+
+.. testoutput::
+
     {
         "*schema": "Car",
         "brand": "Volvo",
@@ -90,9 +109,15 @@ Example
             }
         ]
     }
-    >>> volvo.wheels.append(Wheel(diameter=2.))
-    >>> volvo.wheels.append(Wheel())  # using default value here
-    >>> volvo.to_json()
+
+.. testcode::
+
+    volvo.wheels.append(Wheel(diameter=2.))
+    volvo.wheels.append(Wheel())  # using default value here
+    print(volvo.to_json())
+
+.. testoutput::
+
     {
         "*schema": "Car",
         "brand": "Volvo",
@@ -117,8 +142,14 @@ Example
             }
        ]
     }
-    >>> volvo2 = Car.FromJSON(volvo.to_json())
-    >>> volvo2.to_json()
+
+.. testcode::
+
+    volvo2 = Car.FromJSON(volvo.to_json())
+    volvo2.to_json()
+
+.. testoutput::
+
     {
         "*schema": "Car",
         "brand": "Volvo",
@@ -143,6 +174,7 @@ Example
             }
         ]
     }
+
 
 Author
 ------
