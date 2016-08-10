@@ -31,152 +31,126 @@ This repository can be installed with ``pip``.
 Example
 -------
 
-.. testsetup:: *
+.. code-block:: python
 
-    from jsonobject import Property, PropertySet, EnumProperty
+    >>> from json import dumps
+    >>> from jsonobject import Property, PropertySet, EnumProperty
 
-.. testcode:: python
+    >>> class Wheel(PropertySet):
+    ...    diameter = Property(float, default=1.)
 
-    class Wheel(PropertySet):
-        diameter = Property(float, default=1.)
+    >>> class Rating(EnumProperty):
+    ...    ok = 'ok'
+    ...    bad = 'bad'
+    ...    good = 'good'
 
-    class Rating(EnumProperty):
-        ok = 'ok'
-        bad = 'bad'
-        good = 'good'
+    >>> class Car(PropertySet):
+    ...    wheels = Property(type=Wheel, is_list=True)
+    ...    brand = Property()
+    ...    model = Property()
+    ...    rating = Property(enum=Rating, default=Rating.ok)
 
-    class Car(PropertySet):
-        wheels = Property(type=Wheel, is_list=True)
-        brand = Property()
-        model = Property()
-        rating = Property(enum=Rating, default=Rating.ok)
-
-.. testcode::
-
-    volvo = Car(brand='Volvo', model='V70', rating=Rating.good)
-    print(volvo.to_json())
-
-.. testoutput::
-
+    >>> volvo = Car(brand='Volvo', model='V70', rating=Rating.good)
+    >>> print(volvo.to_json())
     {
-        "*schema": "Car",
-        "brand": "Volvo",
-        "model": "V70",
-        "rating": "good",
-        "wheels": []
+      "*schema": "Car",
+      "brand": "Volvo",
+      "model": "V70",
+      "rating": "good",
+      "wheels": []
     }
 
-.. testcode::
-
-    volvo.wheels.append(Wheel(diameter=2.))
-    print(volvo.to_json())
-
-.. testoutput::
-
-    {  
-        "*schema": "Car",
-        "brand": "Volvo",
-        "model": "V70",
-        "rating": "good",
-        "wheels": [
-            {
-                "*schema": "Wheel",
-                "diameter": 2.0
-            }
-        ]
+    >>> volvo.wheels.append(Wheel(diameter=2.))
+    >>> print(volvo.to_json())
+    {
+      "*schema": "Car",
+      "brand": "Volvo",
+      "model": "V70",
+      "rating": "good",
+      "wheels": [
+        {
+          "*schema": "Wheel",
+          "diameter": 2.0
+        }
+      ]
     }
 
-.. testcode::
-
-    volvo.wheels.append(Wheel(diameter=2.))
-    volvo.to_json()
-
-.. testoutput::
-
+    >>> volvo.wheels.append(Wheel(diameter=2.))
+    >>> print(volvo.to_json())
     {
-        "*schema": "Car",
-        "brand": "Volvo",
-        "model": "V70",
-        "rating": "good",
-        "wheels": [
-            {
-                "*schema": "Wheel",
-                "diameter": 2.0
-            },
-            {
-                "*schema": "Wheel",
-                "diameter": 2.0
-            }
-        ]
+      "*schema": "Car",
+      "brand": "Volvo",
+      "model": "V70",
+      "rating": "good",
+      "wheels": [
+        {
+          "*schema": "Wheel",
+          "diameter": 2.0
+        },
+        {
+          "*schema": "Wheel",
+          "diameter": 2.0
+        }
+      ]
     }
 
-.. testcode::
-
-    volvo.wheels.append(Wheel(diameter=2.))
-    volvo.wheels.append(Wheel())  # using default value here
-    print(volvo.to_json())
-
-.. testoutput::
-
+    >>> volvo.wheels.append(Wheel(diameter=2.))
+    >>> volvo.wheels.append(Wheel())  # using default value here
+    >>> print(volvo.to_json())
     {
-        "*schema": "Car",
-        "brand": "Volvo",
-        "model": "V70",
-        "rating": "good",
-        "wheels": [
-            {
-                "*schema": "Wheel",
-                "diameter": 2.0
-            },
-            {
-                "*schema": "Wheel",
-                "diameter": 2.0
-            },
-            {
-                "*schema": "Wheel",
-                "diameter": 2.0
-            },
-            {
-                "*schema": "Wheel",
-                "diameter": 1.0
-            }
-       ]
+      "*schema": "Car",
+      "brand": "Volvo",
+      "model": "V70",
+      "rating": "good",
+      "wheels": [
+        {
+          "*schema": "Wheel",
+          "diameter": 2.0
+        },
+        {
+          "*schema": "Wheel",
+          "diameter": 2.0
+        },
+        {
+          "*schema": "Wheel",
+          "diameter": 2.0
+        },
+        {
+          "*schema": "Wheel",
+          "diameter": 1.0
+        }
+      ]
     }
 
-.. testcode::
-
-    volvo2 = Car.FromJSON(volvo.to_json())
-    volvo2.to_json()
-
-.. testoutput::
-
+    >>> volvo2 = Car.FromJSON(volvo.to_json())
+    >>> print(volvo2.to_json())
     {
-        "*schema": "Car",
-        "brand": "Volvo",
-        "model": "V70",
-        "rating": "good",
-        "wheels": [
-            {
-                "*schema": "Wheel",
-                "diameter": 2.0
-            },
-            {
-                "*schema": "Wheel",
-                "diameter": 2.0
-            },
-            {
-                "*schema": "Wheel",
-                "diameter": 2.0
-            },
-            {
-                "*schema": "Wheel",
-                "diameter": 1.0
-            }
-        ]
+      "*schema": "Car",
+      "brand": "Volvo",
+      "model": "V70",
+      "rating": "good",
+      "wheels": [
+        {
+          "*schema": "Wheel",
+          "diameter": 2.0
+        },
+        {
+          "*schema": "Wheel",
+          "diameter": 2.0
+        },
+        {
+          "*schema": "Wheel",
+          "diameter": 2.0
+        },
+        {
+          "*schema": "Wheel",
+          "diameter": 1.0
+        }
+      ]
     }
 
 
 Author
 ------
 
-``jsonobject`` is written and maintained by Johan Egneblad <johan@egneblad>. 
+``jsonobject`` is written and maintained by Johan Egneblad <johan@egneblad>.
