@@ -39,12 +39,12 @@ class Property(object):
         else:
             try:
                 value = getattr(model_instance, self.attr_name)
-                if value is None:
-                    return self.none
-                else:
-                    return value
             except AttributeError:
-                return self.default
+                value = self.default
+            if value is None:
+                return self.none
+            else:
+                return value
 
     def __set__(self, model_instance, value):
         value = self.validate(value)
@@ -54,8 +54,11 @@ class Property(object):
         return value is None
 
     def validate(self, value):
+        # Required
         if value is None and not self.required:
             return None
+        elif value is None and self.is_empty(value):
+            raise ValueError("Property %s is required" % self.name)
 
         # Bool
         try:
@@ -89,11 +92,6 @@ class Property(object):
         # Built-ins
         elif self.type is int or self.type is float or self.type is str:
             value = self.type(value)
-
-        # Required
-        if self.required:
-            if self.is_empty(value):
-                raise ValueError("Property %s is required" % self.name)
 
         # Enum test
         if self.enum is not None:
