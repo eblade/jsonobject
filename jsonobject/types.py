@@ -7,6 +7,13 @@ class Property(object):
     def __init__(self, type=str, name=None, default=None, enum=None,
                  required=False, validator=None, wrap=False, none=None,
                  is_list=False):
+
+        if type not in (str, int, float) or is_list:
+            if default is not None:
+                raise ValueError('Can only use default values for simple types')
+            elif none is not None:
+                raise ValueError('None value only makes sense for simple types')
+
         self.name = name
         self.type = enum if enum else type
         self.enum = enum
@@ -33,7 +40,7 @@ class Property(object):
                 if self.is_list:
                     value = list()
                 else:
-                    value = self.type() if self.default is None else self.type(self.default)
+                    value = self.type()
                 setattr(model_instance, self.attr_name, value)
                 return value
         else:
@@ -90,8 +97,13 @@ class Property(object):
             value = self.enum(value)
 
         # Built-ins
-        elif self.type is int or self.type is float or self.type is str:
+        elif self.type in (int, float, str):
             value = self.type(value)
+
+        # Regular list or dict
+        elif self.type in (list, dict):
+            if not issubclass(value.__class__, self.type):
+                raise ValueError('Property %s must be of type %s' % (self.name, repr(self.type)))
 
         # Enum test
         if self.enum is not None:
