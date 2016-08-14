@@ -4,7 +4,7 @@ import pytest
 from jsonobject import PropertySet, Property, EnumProperty
 
 
-def test_set_via_contructor():
+def test_set_via_constructor():
     class O(PropertySet):
         s = Property(int)
 
