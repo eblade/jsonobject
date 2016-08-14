@@ -8,7 +8,7 @@ class Property(object):
                  required=False, validator=None, wrap=False, none=None,
                  is_list=False):
 
-        if type not in (str, int, float) or is_list:
+        if type not in (str, int, float, bool) or is_list:
             if default is not None:
                 raise ValueError('Can only use default values for simple types')
             elif none is not None:
@@ -97,7 +97,7 @@ class Property(object):
             value = self.enum(value)
 
         # Built-ins
-        elif self.type in (int, float, str):
+        elif self.type in (int, float, str, bool):
             value = self.type(value)
 
         # Regular list or dict
