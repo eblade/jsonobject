@@ -41,7 +41,7 @@ def test_set_required_missing():
 
     with pytest.raises(ValueError):
         o = O(s='test')
-        o.s = None 
+        o.s = None
 
 
 def test_set_required_present():
@@ -54,7 +54,7 @@ def test_set_required_present():
 def test_none_by_kwarg():
     class O(PropertySet):
         s = Property(none='-')
-    
+
     o = O(s=None)
 
     assert o.s == '-'
@@ -63,7 +63,7 @@ def test_none_by_kwarg():
 def test_none_by_default():
     class O(PropertySet):
         s = Property(none='-')
-    
+
     o = O()
 
     assert o.s == '-'
@@ -72,7 +72,7 @@ def test_none_by_default():
 def test_none_by_explicit_default():
     class O(PropertySet):
         s = Property(default=None, none='-')
-    
+
     o = O()
 
     assert o.s == '-'
@@ -81,7 +81,7 @@ def test_none_by_explicit_default():
 def test_none_by_attribute():
     class O(PropertySet):
         s = Property(none='-')
-    
+
     o = O()
     o.s = None
 
@@ -95,9 +95,8 @@ def test_external_validator():
 
     class O(PropertySet):
         s = Property(validator=validator)
-    
+
     o = O(s='right')
 
     with pytest.raises(ValueError):
         o.s = 'wrong'
-
