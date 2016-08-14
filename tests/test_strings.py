@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from jsonobject import PropertySet, Property, EnumProperty
+from jsonobject import PropertySet, Property
 
 
 def test_set_via_constructor():
@@ -49,6 +49,8 @@ def test_set_required_present():
         s = Property(required=True)
 
     o = O(s='test')
+
+    assert o.s == 'test'
 
 
 def test_none_by_kwarg():
@@ -100,3 +102,5 @@ def test_external_validator():
 
     with pytest.raises(ValueError):
         o.s = 'wrong'
+
+    assert o.s == 'right'
