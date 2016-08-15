@@ -68,14 +68,22 @@ class Property(object):
             raise ValueError("Property %s is required" % self.name)
 
         # Bool
-        try:
-            if self.type is bool and value.lower() in ('yes', 'no', 'true', 'false', '1', '0'):
-                if value in ('yes', 'true', '1'):
-                    value = True
-                else:
+        if self.type is bool:
+            try:
+                if isinstance(value, bool):
+                    pass
+                elif value == 0:
                     value = False
-        except AttributeError:
-            pass
+                elif value == 1:
+                    value = True
+                elif value.lower() in ('yes', 'true', '1'):
+                    value = True
+                elif value.lower() in ('no', 'false', '0'):
+                    value = False
+                else:
+                    raise ValueError('Invalid bool value %s' % value)
+            except AttributeError:
+                raise ValueError('Invalid bool value %s' % value)
 
         # PropertySet - Wrapped
         if self.wrap:
