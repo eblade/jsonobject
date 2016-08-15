@@ -14,6 +14,9 @@ class Property(object):
             elif none is not None:
                 raise ValueError('None value only makes sense for simple types')
 
+        if is_list and not issubclass(type, PropertySet):
+            raise ValueError('Please use is_list only with ProperySet')
+
         self.name = name
         self.type = enum if enum else type
         self.enum = enum
@@ -91,14 +94,6 @@ class Property(object):
                 value = wrap_dict(value)
             elif isinstance(value, str):
                 value = wrap_raw_json(value)
-
-        # PropertySet - Direct
-        elif issubclass(self.type, PropertySet) and isinstance(value, dict):
-            value = self.type(value)
-
-        # PropertySet - Direct List
-        elif issubclass(self.type, PropertySet) and self.is_list:
-            value = [self.type(list_value) for list_value in value]
 
         # Enum
         elif self.enum:
@@ -218,7 +213,13 @@ class PropertySet(metaclass=ClassWithProperties):
     def from_dict(self, dct):
         for attr_name in self._all_properties:
             if attr_name in dct:
-                setattr(self, attr_name, dct.get(attr_name))
+                attr = self._properties[attr_name]
+                if attr.is_list:
+                    setattr(self, attr_name, [
+                        attr.type.FromDict(d) for d in dct.get(attr_name)
+                    ])
+                else:
+                    setattr(self, attr_name, dct.get(attr_name))
 
     @classmethod
     def FromDict(cls, dct):
