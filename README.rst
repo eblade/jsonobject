@@ -1,3 +1,7 @@
+.. image:: https://travis-ci.org/eblade/jsonobject.svg?branch=master
+    :target: https://travis-ci.org/eblade/jsonobject
+
+
 jsonobject
 ==========
 

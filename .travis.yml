@@ -8,6 +8,6 @@ install:
   - "pip install pytest pyflakes pip pep8 coverage"
   - "python setup.py install"    
 # command to run tests
-script: "env PYTHONPATH=.:$PYTHONPATH py.test -v"
+script: "./scripts/run_tests.sh"
 notifications:
   email: false
