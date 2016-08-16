@@ -99,3 +99,13 @@ def test_no_shared_references():
 
     assert o1.s == [1]
     assert o2.s == []
+
+
+def test_delete():
+    class O(PropertySet):
+        s = Property(list)
+
+    o = O(s=[1, 2, 3])
+    del o.s
+
+    assert o.s is None

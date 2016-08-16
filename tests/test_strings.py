@@ -104,3 +104,13 @@ def test_external_validator():
         o.s = 'wrong'
 
     assert o.s == 'right'
+
+
+def test_delete():
+    class O(PropertySet):
+        s = Property(str)
+
+    o = O(s='string')
+    del o.s
+
+    assert o.s is None

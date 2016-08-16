@@ -38,7 +38,10 @@ class Property(object):
 
         if self.type in (dict, list) or self.is_list:
             try:
-                return getattr(model_instance, self.attr_name)
+                value = getattr(model_instance, self.attr_name)
+                if self.is_list and value is None:
+                    value = list()
+                return value
             except AttributeError:
                 if self.is_list:
                     value = list()
@@ -58,6 +61,10 @@ class Property(object):
 
     def __set__(self, model_instance, value):
         value = self.validate(value)
+        setattr(model_instance, self.attr_name, value)
+
+    def __delete__(self, model_instance):
+        value = self.validate(None)
         setattr(model_instance, self.attr_name, value)
 
     def is_empty(self, value):

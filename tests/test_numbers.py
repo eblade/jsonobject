@@ -123,3 +123,13 @@ def test_bad_input_by_attribute():
 
     with pytest.raises(ValueError):
         o.s = 'string'
+
+
+def test_delete():
+    class O(PropertySet):
+        s = Property(int)
+
+    o = O(s=1)
+    del o.s
+
+    assert o.s is None

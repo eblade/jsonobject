@@ -143,3 +143,13 @@ def test_bool_word(word, expected):
     o.s = word
 
     assert o.s is expected
+
+
+def test_delete():
+    class O(PropertySet):
+        s = Property(bool)
+
+    o = O(s=True)
+    del o.s
+
+    assert o.s is None
