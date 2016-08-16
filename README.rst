@@ -157,4 +157,4 @@ Example
 Author
 ------
 
-``jsonobject`` is written and maintained by Johan Egneblad <johan@egneblad>.
+``jsonobject`` is written and maintained by Johan Egneblad <johan@egneblad.se>.
