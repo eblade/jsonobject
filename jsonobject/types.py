@@ -17,7 +17,7 @@ class Property(object):
         if is_list and not issubclass(type, PropertySet):
             raise ValueError('Please use is_list only with ProperySet')
 
-        self.name = name
+        self.serialized_name = name
         self.type = enum if enum else type
         self.enum = enum
         self.required = required
@@ -26,11 +26,13 @@ class Property(object):
         self.wrap = wrap
         self.none = none
         self.is_list = is_list
+        self._property_name = None
 
     def __property_config__(self, model_class, property_name):
         self.model_class = model_class
-        if self.name is None:
-            self.name = property_name
+        self._property_name = property_name
+        if self.serialized_name is None:
+            self.serialized_name = property_name
 
     def __get__(self, model_instance, model_class):
         if model_instance is None:
@@ -38,7 +40,7 @@ class Property(object):
 
         if self.type in (dict, list) or self.is_list:
             try:
-                value = getattr(model_instance, self.attr_name)
+                value = getattr(model_instance, self.property_name)
                 if self.is_list and value is None:
                     value = list()
                 return value
@@ -47,11 +49,11 @@ class Property(object):
                     value = list()
                 else:
                     value = self.type()
-                setattr(model_instance, self.attr_name, value)
+                setattr(model_instance, self.property_name, value)
                 return value
         else:
             try:
-                value = getattr(model_instance, self.attr_name)
+                value = getattr(model_instance, self.property_name)
             except AttributeError:
                 value = self.default
             if value is None:
@@ -61,11 +63,11 @@ class Property(object):
 
     def __set__(self, model_instance, value):
         value = self.validate(value)
-        setattr(model_instance, self.attr_name, value)
+        setattr(model_instance, self.property_name, value)
 
     def __delete__(self, model_instance):
         value = self.validate(None)
-        setattr(model_instance, self.attr_name, value)
+        setattr(model_instance, self.property_name, value)
 
     def is_empty(self, value):
         return value is None
@@ -75,7 +77,7 @@ class Property(object):
         if value is None and not self.required:
             return None
         elif value is None and self.is_empty(value):
-            raise ValueError("Property %s is required" % self.name)
+            raise ValueError("Property %s is required" % self.property_name)
 
         # Bool
         if self.type is bool:
@@ -113,12 +115,12 @@ class Property(object):
         # Regular list or dict
         elif self.type in (list, dict):
             if not issubclass(value.__class__, self.type):
-                raise ValueError('Property %s must be of type %s' % (self.name, repr(self.type)))
+                raise ValueError('Property %s must be of type %s' % (self.property_name, repr(self.type)))
 
         # Enum test
         if self.enum is not None:
             if not isinstance(value, self.enum):
-                raise ValueError("Property %s must be enum of type %s" % (self.name, repr(self.enum)))
+                raise ValueError("Property %s must be enum of type %s" % (self.property_name, repr(self.enum)))
 
         # External Validator
         if callable(self.validator):
@@ -127,8 +129,8 @@ class Property(object):
         return value
 
     @property
-    def attr_name(self):
-        return '_' + self.name
+    def property_name(self):
+        return '_' + self._property_name
 
     @property
     def is_embedded(self):
@@ -167,17 +169,17 @@ def _initialize_properties(model_class, name, bases, dct):
             property_source.update(dict.fromkeys(property_keys, base))
             model_class._properties.update(base._properties)
 
-    for attr_name in dct.keys():
-        attr = dct[attr_name]
-        if isinstance(attr, Property):
-            if attr_name in defined:
-                raise AttributeError('Duplicate property: %s' % attr_name)
-            defined.add(attr_name)
-            model_class._properties[attr_name] = attr
-            attr.__property_config__(model_class, attr_name)
+    for property_name in dct.keys():
+        prop = dct[property_name]
+        if isinstance(prop, Property):
+            if property_name in defined:
+                raise AttributeError('Duplicate property: %s' % property_name)
+            defined.add(property_name)
+            model_class._properties[property_name] = prop
+            prop.__property_config__(model_class, property_name)
 
     model_class._all_properties = tuple(
-        prop.name for name, prop in model_class._properties.items()
+        (prop._property_name, prop.serialized_name) for name, prop in model_class._properties.items()
     )
 
 
@@ -205,28 +207,28 @@ class PropertySet(metaclass=ClassWithProperties):
 
     def to_dict(self):
         dct = {}
-        for attr_name in self._all_properties:
-            value = getattr(self, attr_name)
+        for property_name, dict_name in self._all_properties:
+            value = getattr(self, property_name)
             try:
                 try:
-                    dct[attr_name] = [value.to_dict() for value in value]
+                    dct[dict_name] = [value.to_dict() for value in value]
                 except (AttributeError, TypeError):
-                    dct[attr_name] = value.to_dict()
+                    dct[dict_name] = value.to_dict()
             except AttributeError:
-                dct[attr_name] = value
+                dct[dict_name] = value
         dct['*schema'] = self.__class__.__name__
         return dct
 
     def from_dict(self, dct):
-        for attr_name in self._all_properties:
-            if attr_name in dct:
-                attr = self._properties[attr_name]
-                if attr.is_list:
-                    setattr(self, attr_name, [
-                        attr.type.FromDict(d) for d in dct.get(attr_name)
+        for property_name, dict_name in self._all_properties:
+            if dict_name in dct:
+                prop = self._properties[property_name]
+                if prop.is_list:
+                    setattr(self, property_name, [
+                        prop.type.FromDict(d) for d in dct.get(dict_name)
                     ])
                 else:
-                    setattr(self, attr_name, dct.get(attr_name))
+                    setattr(self, property_name, dct.get(dict_name))
 
     @classmethod
     def FromDict(cls, dct):
