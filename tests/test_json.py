@@ -69,3 +69,17 @@ def test_json_3():
 
     assert o.to_dict() == O(o.to_dict()).to_dict()
     assert o.to_json() == O.FromJSON(o.to_json()).to_json()
+
+
+def test_json_4():
+    class P(PropertySet):
+        a = Property(int)
+
+    class O(PropertySet):
+        d = Property(dict)
+
+    o = O()
+
+    assert o.to_dict().get('d') == {}
+    assert o.to_dict() == O(o.to_dict()).to_dict()
+    assert o.to_json() == O.FromJSON(o.to_json()).to_json()

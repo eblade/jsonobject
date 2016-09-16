@@ -6,7 +6,7 @@ from .schema import wrap_dict, wrap_raw_json
 class Property(object):
     def __init__(self, type=str, name=None, default=None, enum=None,
                  required=False, validator=None, wrap=False, none=None,
-                 is_list=False):
+                 is_list=False, calculated=False):
 
         if type not in (str, int, float, bool) or is_list:
             if default is not None:
@@ -27,6 +27,7 @@ class Property(object):
         self.none = none
         self.is_list = is_list
         self._property_name = None
+        self.calculated = calculated
 
     def __property_config__(self, model_class, property_name):
         self.model_class = model_class
@@ -77,7 +78,7 @@ class Property(object):
         if value is None and not self.required:
             return None
         elif value is None and self.is_empty(value):
-            raise ValueError("Property %s is required" % self.property_name)
+            raise ValueError("Property %s is required" % self._property_name)
 
         # Bool
         if self.type is bool:
@@ -115,12 +116,13 @@ class Property(object):
         # Regular list or dict
         elif self.type in (list, dict):
             if not issubclass(value.__class__, self.type):
-                raise ValueError('Property %s must be of type %s' % (self.property_name, repr(self.type)))
+                raise ValueError('Property %s must be of type %s (was %s)' %
+                                 (self._property_name, repr(self.type), value.__class__))
 
         # Enum test
         if self.enum is not None:
             if not isinstance(value, self.enum):
-                raise ValueError("Property %s must be enum of type %s" % (self.property_name, repr(self.enum)))
+                raise ValueError("Property %s must be enum of type %s" % (self._property_name, repr(self.enum)))
 
         # External Validator
         if callable(self.validator):
@@ -196,54 +198,64 @@ class PropertySet(metaclass=ClassWithProperties):
         for key, value in values.items():
             setattr(self, key, value)
 
-    def to_json(self, pretty=True):
-        return json.dumps(self, default=lambda x: x.to_dict(), indent=(2 if pretty else None), sort_keys=True)
+    def to_json(self, pretty=True, include_calculated=False):
+        return json.dumps(
+            self,
+            default=lambda x: x.to_dict(include_calculated=include_calculated),
+            indent=(2 if pretty else None),
+            sort_keys=True
+        )
 
-    def from_json(self, json_string):
+    def from_json(self, json_string, include_calculated=False):
         if json_string is None:
             self.from_dict({})
         else:
-            self.from_dict(json.loads(json_string))
+            self.from_dict(json.loads(json_string), include_calculated=include_calculated)
 
-    def to_dict(self):
+    def to_dict(self, include_calculated=False):
         dct = {}
         for property_name, dict_name in self._all_properties:
             value = getattr(self, property_name)
+            prop = self._properties[property_name]
+            if not include_calculated and prop.calculated:
+                continue
             try:
-                try:
-                    dct[dict_name] = [value.to_dict() for value in value]
-                except (AttributeError, TypeError):
-                    dct[dict_name] = value.to_dict()
+                if prop.is_list and value is not None:
+                    dct[dict_name] = [value.to_dict(include_calculated=include_calculated) for value in value]
+                else:
+                    dct[dict_name] = value.to_dict(include_calculated=include_calculated)
             except AttributeError:
                 dct[dict_name] = value
         dct['*schema'] = self.__class__.__name__
         return dct
 
-    def from_dict(self, dct):
+    def from_dict(self, dct, include_calculated=False):
         for property_name, dict_name in self._all_properties:
             if dict_name in dct:
                 prop = self._properties[property_name]
+                if not include_calculated and prop.calculated:
+                    continue
                 if prop.is_list:
                     setattr(self, property_name, [
-                        prop.type.FromDict(d) for d in dct.get(dict_name)
+                        prop.type.FromDict(d, include_calculated=include_calculated) for d in dct.get(dict_name)
                     ])
                 else:
                     setattr(self, property_name, dct.get(dict_name))
 
     @classmethod
-    def FromDict(cls, dct):
+    def FromDict(cls, dct, include_calculated=False):
         if dct is not None:
             inst = cls()
-            inst.from_dict(dct)
+            inst.from_dict(dct, include_calculated=include_calculated)
             return inst
 
     @classmethod
-    def FromJSON(cls, json_string):
+    def FromJSON(cls, json_string, include_calculated=False):
         inst = cls()
-        inst.from_json(json_string)
+        inst.from_json(json_string, include_calculated=include_calculated)
         return inst
 
 
 class EnumProperty(Enum):
-    def to_dict(self):
+    def to_dict(self, **kwargs):
         return self.name
