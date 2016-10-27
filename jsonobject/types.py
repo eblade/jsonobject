@@ -98,8 +98,15 @@ class Property(object):
             except AttributeError:
                 raise ValueError('Invalid bool value %s' % value)
 
-        # PropertySet - Wrapped
-        if self.wrap:
+        # PropertySet - Static
+        if issubclass(self.type, PropertySet):
+            if isinstance(value, dict):
+                value = self.type.FromDict(value)
+            elif isinstance(value, str):
+                value = self.type.FromJSON(value)
+
+        # PropertySet - Wrapped (Dynamic)
+        elif self.wrap:
             if isinstance(value, dict):
                 value = wrap_dict(value)
             elif isinstance(value, str):
