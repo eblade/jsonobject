@@ -99,7 +99,7 @@ class Property(object):
                 raise ValueError('Invalid bool value %s' % value)
 
         # PropertySet - Static
-        if issubclass(self.type, PropertySet):
+        elif issubclass(self.type, PropertySet):
             if isinstance(value, dict):
                 value = self.type.FromDict(value)
             elif isinstance(value, str):
