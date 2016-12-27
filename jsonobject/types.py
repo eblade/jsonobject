@@ -1,4 +1,5 @@
 import json
+import urllib
 from enum import Enum
 from .schema import wrap_dict, wrap_raw_json
 
@@ -261,6 +262,18 @@ class PropertySet(metaclass=ClassWithProperties):
         inst = cls()
         inst.from_json(json_string, include_calculated=include_calculated)
         return inst
+
+
+class Query(PropertySet):
+    def to_query_string(self):
+        return urllib.parse.urlencode(
+            tuple(
+                (str(key), str(value))
+                for key, value
+                in sorted(self.to_dict().items())
+                if not key.startswith('*')
+            )
+        )
 
 
 class EnumProperty(Enum):
