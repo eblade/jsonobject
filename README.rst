@@ -30,7 +30,7 @@ This repository can be installed with ``pip``.
 
 .. code-block:: bash
 
-    pip install https://github.com/eblade/jsonobject/archive/v1.0.tar.gz
+    pip install https://github.com/eblade/jsonobject/archive/v1.1.0.tar.gz
 
 Example
 -------
@@ -152,6 +152,25 @@ Example
         }
       ]
     }
+
+
+Schema-Less
+-----------
+
+There is also included a "schema-less" mode, found under
+``jsonobject.noschema``. The idea is to provide an easy-to-use read-only
+LINQ-like way of exploring JSON-like files. Here is a small example:
+
+.. code-block:: python
+
+    >>> from jsonobject import Dictionary
+    >>> d = Dictionary.load('tests/test.json')
+    >>> palle = d.drivers.where(lambda x: x.name == "Palle Kuling").join(d.cars, lambda driver, car: driver.car_brand == car.brand and driver.car_model == car.model).single()
+    >>> palle.rating
+    'good'
+
+
+You can also use chained methods like ``select(expr)``, ``first()`` and ``extend(**items)``.
 
 
 Author
