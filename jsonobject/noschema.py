@@ -16,14 +16,14 @@ class Dictionary(dict):
         return Dictionary({k: v for k, v in self.items() if expr(k, v)})
 
     def select(self, expr):
-        return List(expr(k, v) for k, v in self)
+        return List(expr(k, v) for k, v in self.items())
 
     def extend(self, **items):
         result = Dictionary(self) + items
         return result
 
     def map_keys(self, expr):
-        return Dictionary({expr(k): v for k, v in self})
+        return Dictionary({expr(k): v for k, v in self.items()})
 
     def __dir__(self):
         return super().__dir__() + list(self.keys())
