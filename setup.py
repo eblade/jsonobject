@@ -4,7 +4,7 @@
 from setuptools import setup
 
 name_ = 'jsonobject'
-version_ = '1.1.0'
+version_ = '1.1.1'
 packages_ = [
     'jsonobject',
 ]

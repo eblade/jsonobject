@@ -22,6 +22,9 @@ class Dictionary(dict):
         result = Dictionary(self) + items
         return result
 
+    def map_keys(self, expr):
+        return Dictionary({expr(k): v for k, v in self})
+
     def __dir__(self):
         return super().__dir__() + list(self.keys())
 
@@ -153,3 +156,12 @@ def test_join():
     assert (1, 3) in j
     assert (2, 4) in j
     assert (3, 1) not in j
+
+
+def test_map_keys():
+    d = Dictionary({"1": "a", "2": "b"})
+    m = d.map_keys(int)
+    assert 1 in m
+    assert 2 in m
+    assert m[1] == "a"
+    assert m[2] == "b"
