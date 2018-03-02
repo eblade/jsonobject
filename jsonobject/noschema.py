@@ -2,7 +2,6 @@
 
 
 class Dictionary(dict):
-
     @classmethod
     def load(cls, f):
         import json
@@ -31,9 +30,19 @@ class Dictionary(dict):
     def __getattr__(self, attr):
         x = self[attr]
         if type(x) is list:
-            return List(x)
+            wrapped = List(x)
+            self[attr] = wrapped
+            return wrapped
         else:
             return x
+
+    def __setattr__(self, attr, value):
+        if type(value) is list:
+            self[attr] = List(value)
+        elif type(value) is dict:
+            self[attr] = Dictionary(value)
+        else:
+            self[attr] = value
 
 
 class List(list):
@@ -165,3 +174,9 @@ def test_map_keys():
     assert 2 in m
     assert m[1] == "a"
     assert m[2] == "b"
+
+
+def test_change_list_and_reread():
+    d = Dictionary({'a': [1, 2, 3]})
+    d.a.append(4)
+    assert len(d.a) == 4
