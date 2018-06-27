@@ -28,7 +28,7 @@ class Dictionary(dict):
         return super().__dir__() + list(self.keys())
 
     def __getattr__(self, attr):
-        x = self[attr]
+        x = self.get(attr)
         if type(x) is list:
             wrapped = List(x)
             self[attr] = wrapped
