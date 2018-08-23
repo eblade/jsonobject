@@ -2,6 +2,6 @@ pipeline:
   build:
     image: bjodah/bjodahimg16:v1.2
     commands:
-      - pip install pytest pyflakes pip pep8 coverage pytest-pep8 pytest-cov pytest-flakes
-      - python setup.py install
+      - python3 -m pip install pytest pyflakes pip pep8 coverage pytest-pep8 pytest-cov pytest-flakes
+      - python3 setup.py install
       - ./scripts/run_tests.sh

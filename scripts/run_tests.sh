@@ -4,5 +4,5 @@
 # or
 #   $ ./scripts/run_tests.sh --cov pycvodes --cov-report html
 #python -m pytest --doctest-modules --pep8 --flakes $@
-python -m pytest --pep8 --flakes -v $@
-python -m doctest README.rst
+python3 -m pytest --pep8 --flakes -v $@
+python3 -m doctest README.rst
