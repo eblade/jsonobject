@@ -1,0 +1,7 @@
+pipeline:
+  build:
+    image: ubuntu:16:04
+    commands:
+      - pip install pytest pyflakes pip pep8 coverage pytest-pep8 pytest-cov pytest-flakes
+      - python setup.py install
+      - ./scripts/run_tests.sh
