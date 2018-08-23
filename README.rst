@@ -165,7 +165,10 @@ LINQ-like way of exploring JSON-like files. Here is a small example:
 
     >>> from jsonobject import Dictionary
     >>> d = Dictionary.load('tests/test.json')
-    >>> palle = d.drivers.where(lambda x: x.name == "Palle Kuling").join(d.cars, lambda driver, car: driver.car_brand == car.brand and driver.car_model == car.model).single()
+    >>> palle = (d.drivers
+    ...     .where(lambda x: x.name == "Palle Kuling")
+    ...     .join(d.cars, lambda driver, car: driver.car_brand == car.brand and driver.car_model == car.model)
+    ...     .single())
     >>> palle.rating
     'good'
 
