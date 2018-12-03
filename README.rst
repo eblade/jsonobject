@@ -1,5 +1,5 @@
-.. image:: https://travis-ci.org/eblade/jsonobject.svg?branch=master
-    :target: https://travis-ci.org/eblade/jsonobject
+.. image:: http://egneblad.se:49080/api/badges/eblade/jsonobject/status.svg
+    :target: http://egneblad.se:49080/eblade/jsonobject
 
 
 jsonobject
