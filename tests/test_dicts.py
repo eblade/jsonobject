@@ -109,3 +109,12 @@ def test_default_type():
     o = O()
 
     assert type(o.s) is dict
+
+
+def test_via_hint():
+    class O(PropertySet):
+        s: dict = Property()
+
+    o = O()
+
+    assert type(o.s) is dict

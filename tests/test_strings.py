@@ -13,6 +13,15 @@ def test_set_via_constructor():
     assert o.s == 'test'
 
 
+def test_type_hint_set_via_constructor():
+    class O(PropertySet):
+        s: str = Property()
+
+    o = O(s='test')
+
+    assert o.s == 'test'
+
+
 def test_set_via_attribute():
     class O(PropertySet):
         s = Property()

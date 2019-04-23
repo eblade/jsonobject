@@ -153,3 +153,12 @@ def test_delete():
     del o.s
 
     assert o.s is None
+
+
+def test_type_via_hint():
+    class O(PropertySet):
+        s: bool = Property()
+
+    o = O(s='yes')
+
+    assert type(o.s) is bool

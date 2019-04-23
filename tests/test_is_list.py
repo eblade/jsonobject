@@ -2,6 +2,7 @@
 
 import pytest
 from jsonobject import PropertySet, Property
+from typing import List
 
 
 def test_list_of_property_sets():
@@ -165,3 +166,20 @@ def test_default():
     with pytest.raises(ValueError):
         class O(PropertySet):
             s = Property(P, is_list=True, default=1)
+
+
+def test_list_via_hint():
+    class P(PropertySet):
+        s: str = Property()
+
+    class O(PropertySet):
+        s: List[P] = Property()
+
+    p1 = P()
+    p2 = P()
+    p3 = P()
+    o = O(s=[p1, p2, p3])
+
+    assert len(o.s) == 3
+    assert o.s == [p1, p2, p3]
+    assert o.to_dict() == O(o.to_dict()).to_dict()

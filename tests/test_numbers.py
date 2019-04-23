@@ -13,9 +13,28 @@ def test_set_via_constructor():
     assert o.s == 1
 
 
+def test_type_hint_set_via_constructor():
+    class O(PropertySet):
+        s: int = Property()
+
+    o = O(s=1)
+
+    assert o.s == 1
+
+
 def test_set_via_attribute():
     class O(PropertySet):
         s = Property(int)
+
+    o = O()
+    o.s = 1
+
+    assert o.s == 1
+
+
+def test_type_hint_set_via_attribute():
+    class O(PropertySet):
+        s: int = Property()
 
     o = O()
     o.s = 1

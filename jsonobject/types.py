@@ -1,5 +1,12 @@
 import json
 import urllib
+
+try:
+    import typing
+    has_typing = True
+except ImportError:
+    has_typing = False
+
 from enum import Enum
 from .schema import wrap_dict, wrap_raw_json
 
@@ -9,14 +16,7 @@ class Property(object):
                  required=False, validator=None, wrap=False, none=None,
                  is_list=False, calculated=False):
 
-        if type not in (str, int, float, bool) or is_list:
-            if default is not None:
-                raise ValueError('Can only use default values for simple types')
-            elif none is not None:
-                raise ValueError('None value only makes sense for simple types')
-
-        if is_list and not issubclass(type, PropertySet):
-            raise ValueError('Please use is_list only with ProperySet')
+        self._check_type(type, is_list, default, none)
 
         self.serialized_name = name
         self.type = enum if enum else type
@@ -30,11 +30,42 @@ class Property(object):
         self._property_name = None
         self.calculated = calculated
 
+    @staticmethod
+    def _check_type(type, is_list, default, none):
+        if type not in (str, int, float, bool) or is_list:
+            if default is not None:
+                raise ValueError('Can only use default values for simple types')
+            elif none is not None:
+                raise ValueError('None value only makes sense for simple types')
+
+        if is_list and not issubclass(type, PropertySet):
+            raise ValueError('Please use is_list only with ProperySet')
+
     def __property_config__(self, model_class, property_name):
         self.model_class = model_class
         self._property_name = property_name
         if self.serialized_name is None:
             self.serialized_name = property_name
+
+        if has_typing and hasattr(model_class, '__annotations__'):
+            annotation = model_class.__annotations__.get(property_name)
+            if annotation is not None:
+                if issubclass(annotation, typing.List):
+                    is_list = True
+                    if len(annotation.__args__) != 1:
+                        raise ValueError('List annotations must be typed')
+                    type = annotation.__args__[0]
+                elif issubclass(annotation, EnumProperty):
+                    is_list = False
+                    type = str
+                    self.enum = annotation
+                else:
+                    is_list = False
+                    type = annotation
+
+                self._check_type(type, is_list, self.default, self.none)
+                self.is_list = is_list
+                self.type = type
 
     def __get__(self, model_instance, model_class):
         if model_instance is None:

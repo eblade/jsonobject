@@ -154,6 +154,49 @@ Example
     }
 
 
+Type Hinting
+------------
+
+You can also specify types for properties with Type Hinting, if available:
+
+.. code-block:: python
+
+    >>> from json import dumps
+    >>> from typing import List
+    >>> from jsonobject import Property, PropertySet, EnumProperty
+
+    >>> class Wheel(PropertySet):
+    ...    diameter: float = Property(default=1.)
+
+    >>> class Rating(EnumProperty):
+    ...    ok = 'ok'
+    ...    bad = 'bad'
+    ...    good = 'good'
+
+    >>> class Car(PropertySet):
+    ...    wheels: List[Wheel] = Property()
+    ...    brand = Property()
+    ...    model = Property()
+    ...    rating: Rating = Property(default=Rating.ok)
+
+    >>> volvo = Car(brand='Volvo', model='V90', rating=Rating.good, wheels=[])
+    >>> volvo.wheels.append(Wheel(diameter=3.))
+    >>> print(volvo.to_json())
+    {
+      "*schema": "Car",
+      "brand": "Volvo",
+      "model": "V90",
+      "rating": "good",
+      "wheels": [
+        {
+          "*schema": "Wheel",
+          "diameter": 3.0
+        }
+      ]
+    }
+
+
+
 Schema-Less
 -----------
 
