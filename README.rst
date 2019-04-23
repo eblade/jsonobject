@@ -196,6 +196,16 @@ You can also specify types for properties with Type Hinting, if available:
     }
 
 
+Supported types:
+
+  * ``str``
+  * ``int``
+  * ``float``
+  * ``bool``
+  * ``dict``
+  * ``typing.List[T]`` where ``T`` is a subclass of ``PropertySet``
+  * ``T`` where ``T`` is a subclass of EnumProperty
+
 
 Schema-Less
 -----------

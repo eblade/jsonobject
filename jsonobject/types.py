@@ -50,12 +50,12 @@ class Property(object):
         if has_typing and hasattr(model_class, '__annotations__'):
             annotation = model_class.__annotations__.get(property_name)
             if annotation is not None:
-                if issubclass(annotation, typing.List):
+                if hasattr(annotation, '__origin__') and annotation.__origin__ in (list, typing.List):
                     is_list = True
                     if len(annotation.__args__) != 1:
                         raise ValueError('List annotations must be typed')
                     type = annotation.__args__[0]
-                elif issubclass(annotation, EnumProperty):
+                elif issubclass(annotation, (EnumProperty, )):
                     is_list = False
                     type = str
                     self.enum = annotation
