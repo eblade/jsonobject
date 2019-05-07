@@ -2,6 +2,7 @@
 
 import pytest
 from jsonobject import PropertySet, Property
+import typing
 
 
 def test_set_via_constructor():
@@ -114,6 +115,15 @@ def test_default_type():
 def test_via_hint():
     class O(PropertySet):
         s: dict = Property()
+
+    o = O()
+
+    assert type(o.s) is dict
+
+
+def test_via_abstract_hint():
+    class O(PropertySet):
+        s: typing.Dict[str, str] = Property()
 
     o = O()
 

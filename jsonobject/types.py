@@ -55,6 +55,9 @@ class Property(object):
                     if len(annotation.__args__) != 1:
                         raise ValueError('List annotations must be typed')
                     type = annotation.__args__[0]
+                elif hasattr(annotation, '__origin__') and annotation.__origin__ in (dict, typing.Dict):
+                    is_list = False
+                    type = dict
                 elif issubclass(annotation, (EnumProperty, )):
                     is_list = False
                     type = str
