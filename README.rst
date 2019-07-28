@@ -2,15 +2,15 @@
     :target: https://travis-ci.org/eblade/jsonobject
 
 
-jsonobject
-==========
+lindh-jsonobject
+================
 
 JSON serializable python3 objects.
 
 Introduction
 ------------
 
-The purpose with ``jsonobject`` is to provide a way to serialize and
+The purpose with ``lindh.jsonobject`` is to provide a way to serialize and
 deserialize python3 objects into and from JSON so that they can be communicated
 with other application and stored into document databases such as CouchDB.
 
@@ -21,7 +21,7 @@ these are meant to be used with complex objects in document databases.
 Dependencies
 ------------
 
-There are no dependencies besides core python3.
+There are no dependencies besides core python3.6
 
 Installation
 ------------
@@ -30,7 +30,7 @@ This repository can be installed with ``pip``.
 
 .. code-block:: bash
 
-    pip install https://github.com/eblade/jsonobject/archive/v1.3.1.tar.gz
+    pip install lindh-jsonobject
 
 Example
 -------
@@ -38,7 +38,7 @@ Example
 .. code-block:: python
 
     >>> from json import dumps
-    >>> from jsonobject import Property, PropertySet, EnumProperty
+    >>> from lindh.jsonobject import Property, PropertySet, EnumProperty
 
     >>> class Wheel(PropertySet):
     ...    diameter = Property(float, default=1.)
@@ -163,7 +163,7 @@ You can also specify types for properties with Type Hinting, if available:
 
     >>> from json import dumps
     >>> from typing import List
-    >>> from jsonobject import Property, PropertySet, EnumProperty
+    >>> from lindh.jsonobject import Property, PropertySet, EnumProperty
 
     >>> class Wheel(PropertySet):
     ...    diameter: float = Property(default=1.)
@@ -211,12 +211,12 @@ Schema-Less
 -----------
 
 There is also included a "schema-less" mode, found under
-``jsonobject.noschema``. The idea is to provide an easy-to-use read-only
+``lindh.jsonobject.noschema``. The idea is to provide an easy-to-use read-only
 LINQ-like way of exploring JSON-like files. Here is a small example:
 
 .. code-block:: python
 
-    >>> from jsonobject import Dictionary
+    >>> from lindh.jsonobject import Dictionary
     >>> d = Dictionary.load('tests/test.json')
     >>> palle = (d.drivers
     ...     .where(lambda x: x.name == "Palle Kuling")
@@ -232,4 +232,4 @@ You can also use chained methods like ``select(expr)``, ``first()`` and ``extend
 Author
 ------
 
-``jsonobject`` is written and maintained by Johan Egneblad <johan@egneblad.se>.
+``lindh.jsonobject`` is written and maintained by Johan Egneblad <johan@egneblad.se>.

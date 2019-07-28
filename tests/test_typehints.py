@@ -1,4 +1,4 @@
-from jsonobject import PropertySet, Property, EnumProperty
+from lindh.jsonobject import PropertySet, Property, EnumProperty
 from typing import List
 
 

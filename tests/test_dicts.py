@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from jsonobject import PropertySet, Property
+from lindh.jsonobject import PropertySet, Property
 import typing
 
 

@@ -3,14 +3,14 @@
 
 from setuptools import setup
 
-name_ = 'jsonobject'
-version_ = '1.3.2'
+name_ = 'lindh-jsonobject'
+version_ = '1.3.3'
 packages_ = [
-    'jsonobject',
+    'lindh.jsonobject',
 ]
 
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: POSIX",

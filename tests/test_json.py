@@ -1,4 +1,4 @@
-from jsonobject import PropertySet, Property
+from lindh.jsonobject import PropertySet, Property
 
 
 def test_json_1():

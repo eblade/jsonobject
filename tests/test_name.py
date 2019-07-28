@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from jsonobject import PropertySet, Property
+from lindh.jsonobject import PropertySet, Property
 
 
 def test_other_name():
