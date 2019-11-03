@@ -6,8 +6,8 @@ python:
 #  - "sudo apt-get install -qq"
 install:
   - "pip install pytest pyflakes pip pep8 coverage pytest-pep8 pytest-cov pytest-flakes rstcheck"
-  - "python setup.py install"    
+  - "python setup.py install"
 # command to run tests
-script: "./scripts/run_tests.sh"
+script: "./scripts/run_tests.sh --cov lindh --cov-report html"
 notifications:
   email: false
