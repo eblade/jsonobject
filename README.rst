@@ -30,7 +30,7 @@ these are meant to be used with complex objects in document databases.
 Dependencies
 ------------
 
-There are no dependencies besides core python3.6
+There are no dependencies besides core python3.7+
 
 Installation
 ------------
