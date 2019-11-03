@@ -1,3 +1,4 @@
+import pytest
 from lindh.jsonobject import PropertySet, Property, EnumProperty
 from typing import List
 
@@ -47,3 +48,9 @@ def test_complex_object_with_list():
     assert len(a.l) == 2
     assert a.l[0].i == 1
     assert a.l[1].i == 2
+
+
+def test_list_without_type_raises_exception():
+    with pytest.raises(TypeError):
+        class A(PropertySet):
+            l: List = Property(name='Listan')
