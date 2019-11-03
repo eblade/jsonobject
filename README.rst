@@ -7,6 +7,9 @@
 .. image:: https://img.shields.io/pypi/l/lindh-jsonobject.svg
     :target: https://pypi.python.org/pypi/lindh-jsonobject/
 
+.. image:: https://codecov.io/gh/eblade/jsonobject/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/eblade/jsonobject
+
 
 lindh-jsonobject
 ================
