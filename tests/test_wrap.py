@@ -1,5 +1,3 @@
-import pytest
-
 from lindh.jsonobject import register_schema
 from lindh.jsonobject import PropertySet, Property
 
