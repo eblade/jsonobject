@@ -1,6 +1,12 @@
 .. image:: https://travis-ci.org/eblade/jsonobject.svg?branch=master
     :target: https://travis-ci.org/eblade/jsonobject
 
+.. image:: https://img.shields.io/pypi/v/lindh-jsonobject.svg
+    :target: https://pypi.python.org/pypi/lindh-jsonobject/
+
+.. image:: https://img.shields.io/pypi/l/lindh-jsonobject.svg
+    :target: https://pypi.python.org/pypi/lindh-jsonobject/
+
 
 lindh-jsonobject
 ================
