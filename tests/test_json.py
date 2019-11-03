@@ -83,3 +83,15 @@ def test_json_4():
     assert o.to_dict().get('d') == {}
     assert o.to_dict() == O(o.to_dict()).to_dict()
     assert o.to_json() == O.FromJSON(o.to_json()).to_json()
+
+
+def test_if_string_is_passed_to_sub_propertyset_it_should_be_parsed():
+    class P(PropertySet):
+        a: int = Property()
+
+    class Q(PropertySet):
+        p: P = Property()
+
+    q = Q()
+    q.p = '{"a": 42}'
+    assert q.p.a == 42
