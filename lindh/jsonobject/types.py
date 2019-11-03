@@ -4,8 +4,8 @@ import urllib
 try:
     import typing
     has_typing = True
-except ImportError:
-    has_typing = False
+except ImportError:  # pragma: no cover
+    has_typing = False  # pragma: no cover
 
 from enum import Enum
 from .schema import wrap_dict, wrap_raw_json
@@ -129,9 +129,9 @@ class Property(object):
                 elif value.lower() in ('no', 'false', '0'):
                     value = False
                 else:
-                    raise ValueError('Invalid bool value %s' % value)
+                    raise ValueError('Invalid bool value %s' % str(value))
             except AttributeError:
-                raise ValueError('Invalid bool value %s' % value)
+                raise ValueError('Invalid bool value %s' % str(value))
 
         # PropertySet - Static
         elif issubclass(self.type, PropertySet):

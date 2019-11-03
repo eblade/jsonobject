@@ -145,6 +145,15 @@ def test_bool_word(word, expected):
     assert o.s is expected
 
 
+def test_boo_tuple_should_raise():
+    class O(PropertySet):
+        s = Property(bool)
+
+    o = O()
+    with pytest.raises(ValueError):
+        o.s = (True, False)
+
+
 def test_delete():
     class O(PropertySet):
         s = Property(bool)
