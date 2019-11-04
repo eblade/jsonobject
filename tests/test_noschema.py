@@ -47,6 +47,11 @@ def test_json_where_select():
     assert 3 not in w
 
 
+def test_load_file():
+    d = Dictionary.load('tests/test.json')
+    assert 'cars' in d
+
+
 def test_merge_dicts():
     x = {'a': 1, 'b': 2, 'c': 3}
     y = {'c': 4, 'd': 5, 'e': 6}
@@ -107,3 +112,11 @@ def test_change_list_and_reread():
     d = Dictionary({'a': [1, 2, 3]})
     d.a.append(4)
     assert len(d.a) == 4
+
+
+def test_select_deictionary():
+    d = Dictionary({'a': [1, 2, 3], 'b': [2, 3, 4]})
+    items = Dictionary(d.select(lambda k, v: (k, 1 in v)))
+    assert len(items) == 2
+    assert items.a
+    assert not items.b
