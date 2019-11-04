@@ -114,7 +114,7 @@ def test_change_list_and_reread():
     assert len(d.a) == 4
 
 
-def test_select_deictionary():
+def test_select_dictionary():
     d = Dictionary({'a': [1, 2, 3], 'b': [2, 3, 4]})
     items = Dictionary(d.select(lambda k, v: (k, 1 in v)))
     assert len(items) == 2
