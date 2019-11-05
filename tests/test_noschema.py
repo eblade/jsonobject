@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 
+import pytest
 from lindh.jsonobject import List, Dictionary
 from lindh.jsonobject.noschema import merge_dicts
 
@@ -150,3 +151,63 @@ def test_select_dictionary():
     assert len(items) == 2
     assert items.a
     assert not items.b
+
+
+def test_single_more_than_one():
+    l = List([1, 2, 3])
+    with pytest.raises(ValueError):
+        l.single()
+
+
+def test_single_less_than_one():
+    l = List([])
+    with pytest.raises(ValueError):
+        l.single()
+
+
+def test_single_exactly_one():
+    l = List([1])
+    v = l.single()
+    assert v == 1
+
+
+def test_first_more_than_one():
+    l = List([1, 2, 3])
+    f = l.first()
+    assert f == 1
+
+
+def test_first_less_than_one():
+    l = List([])
+    with pytest.raises(IndexError):
+        l.first()
+
+
+def test_first_exactly_one():
+    l = List([1])
+    f = l.first()
+    assert f == 1
+
+
+def test_many_empty():
+    l = List()
+    m = l.many()
+    assert m == List()
+
+
+def test_many_lists_without_expression():
+    l = List([[1, 2, 3], [4, 5, 6]])
+    m = l.many()
+    assert m == List([1, 2, 3, 4, 5, 6])
+
+
+def test_many_lists_with_expression():
+    l = List([[1, 2, 3], [4, 5, 6]])
+    m = l.many(lambda x: (y * 2 for y in x))
+    assert m == List([2, 4, 6, 8, 10, 12])
+
+
+def test_select_without_expression():
+    l = List([1, 2, 3])
+    s = l.select()
+    assert l == s

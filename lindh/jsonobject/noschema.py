@@ -52,17 +52,23 @@ class List(list):
     def where(self, expr):
         return List(x for x in self if expr(x))
 
-    def select(self, expr):
-        return List(expr(x) for x in self)
+    def select(self, expr=None):
+        if callable(expr):
+            return List(expr(x) for x in self)
+        else:
+            return List(x for x in self)
 
     def single(self):
-        assert(len(self) == 1)
+        if len(self) != 1:
+            raise ValueError('Length must be exactly 1')
         return self[0]
 
     def first(self):
+        if len(self) < 1:
+            raise IndexError('Length must be at least1')
         return self[0]
 
-    def many(self, expr):
+    def many(self, expr=None):
         result = []
         for x in self.select(expr):
             result.extend(x)
