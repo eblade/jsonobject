@@ -1,8 +1,10 @@
 import pytest
+from .util import uses_typehints
 from lindh.jsonobject import PropertySet, Property, EnumProperty
 from typing import List
 
 
+@uses_typehints
 def test_simple_object():
     class A(PropertySet):
         a: str = Property()
@@ -19,6 +21,7 @@ def test_simple_object():
     assert a.c == 2.0
 
 
+@uses_typehints
 def test_object_with_enum():
     class E(EnumProperty):
         a = 'aaa'
@@ -33,6 +36,7 @@ def test_object_with_enum():
     assert a.e is E.a
 
 
+@uses_typehints
 def test_complex_object_with_list():
     class B(PropertySet):
         i: int = Property()
@@ -50,6 +54,7 @@ def test_complex_object_with_list():
     assert a.l[1].i == 2
 
 
+@uses_typehints
 def test_list_without_type_raises_exception():
     with pytest.raises(TypeError):
         class A(PropertySet):

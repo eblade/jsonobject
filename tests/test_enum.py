@@ -1,4 +1,5 @@
 import pytest
+from .util import uses_typehints
 from lindh.jsonobject import Property, PropertySet, EnumProperty
 
 
@@ -14,6 +15,7 @@ def test_using_non_enum_enum_for_enum_value():
         a.a = 'blerg'
 
 
+@uses_typehints
 def test_is_embedded():
     class A(PropertySet):
         pass
@@ -24,6 +26,7 @@ def test_is_embedded():
     assert B.a.is_embedded
 
 
+@uses_typehints
 def test_is_not_embedded():
     class A(PropertySet):
         a: int = Property()
