@@ -95,3 +95,31 @@ def test_if_string_is_passed_to_sub_propertyset_it_should_be_parsed():
     q = Q()
     q.p = '{"a": 42}'
     assert q.p.a == 42
+
+
+def test_if_none_passed_to_from_json_results_in_unchanged():
+    class P(PropertySet):
+        a: int = Property(default=42)
+
+    p = P()
+    p.a = 5
+    p.from_json(None)
+    assert p.a == 5
+
+
+def test_calculated_should_be_ignored():
+    class A(PropertySet):
+        a: int = Property()
+        b: int = Property(calculated=True)
+
+    a = A(a=42)
+    a.b = a.a * 2
+    assert a.b == 84
+    da = a.to_dict()
+    assert 'b' not in da.keys()
+    a.b = 1
+    a.from_dict(da)
+    assert a.b == 1
+    da['b'] = 14
+    a.from_dict(da)
+    assert a.b == 1
