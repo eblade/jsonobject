@@ -5,7 +5,7 @@ from setuptools import setup
 
 name_ = 'lindh-jsonobject'
 github_name = 'jsonobject'
-version_ = '1.3.3'
+version_ = '1.4.0'
 packages_ = [
     'lindh.jsonobject',
 ]
