@@ -1,4 +1,5 @@
-from lindh.jsonobject import register_schema
+import pytest
+from lindh.jsonobject import register_schema, wrap_raw_json, wrap_dict
 from lindh.jsonobject import PropertySet, Property
 
 
@@ -63,3 +64,16 @@ def test_wrapping_parsed():
 
     assert isinstance(c.child, A)
     assert c.child.a == 42
+
+
+def test_wrapping_parsed_none():
+    assert wrap_raw_json(None) is None
+
+
+def test_wrapping_dict_none():
+    assert wrap_dict(None) is None
+
+
+def test_wrapping_dict_with_no_schema():
+    with pytest.raises(NameError):
+        wrap_dict({})
