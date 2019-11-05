@@ -161,11 +161,6 @@ class Property(object):
                 raise ValueError('Property %s must be of type %s (was %s)' %
                                  (self._property_name, repr(self.type), value.__class__))
 
-        # Enum test
-        if self.enum is not None:
-            if not isinstance(value, self.enum):
-                raise ValueError("Property %s must be enum of type %s" % (self._property_name, repr(self.enum)))
-
         # External Validator
         if callable(self.validator):
             self.validator(value)
