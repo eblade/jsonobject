@@ -29,3 +29,15 @@ def test_is_not_embedded():
         a: int = Property()
 
     assert not A.a.is_embedded
+
+
+def test_enum_to_dict():
+    class E(EnumProperty):
+        a = 1
+
+    class A(PropertySet):
+        a = Property(enum=E, default=E.a)
+
+    a = A(a=E.a)
+    d = a.to_dict()
+    assert d['a'] == E.a.name
