@@ -15,30 +15,30 @@ def test_dictionary_setattr_value():
     d = Dictionary()
     d.a = 123
     assert d.a == 123
-    
+
 
 def test_dictionary_setattr_list():
     d = Dictionary()
-    d.a = [1, 2, 3] 
+    d.a = [1, 2, 3]
     assert d.a == [1, 2, 3]
-    
+
 
 def test_dictionary_setattr_List():
     d = Dictionary()
-    d.a = List([1, 2, 3]) 
+    d.a = List([1, 2, 3])
     assert d.a == List([1, 2, 3])
-    
+
 
 def test_dictionary_setattr_dict():
     d = Dictionary()
     d.a = {'a': 1}
     assert d.a == {'a': 1}
-    
+
 
 def test_dictionary_setattr_Dictionary():
     d = Dictionary()
     d.a = Dictionary({'a': 1})
-    assert d.a == Dictionary({'a': 1})   
+    assert d.a == Dictionary({'a': 1})
 
 
 def test_dictionary_where():
