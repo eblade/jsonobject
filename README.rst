@@ -1,3 +1,6 @@
+.. image:: https://github.com/eblade/jsonobject/actions/workflows/python-app.yml/badge.svg
+    :target: https://github.com/eblade/jsonobject/actions/workflows/python-app.yml
+
 .. image:: https://img.shields.io/pypi/v/lindh-jsonobject.svg
     :target: https://pypi.python.org/pypi/lindh-jsonobject/
 
