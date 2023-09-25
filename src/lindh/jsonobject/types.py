@@ -52,10 +52,10 @@ class Property(object):
             if annotation is not None:
                 if hasattr(annotation, '__origin__') and annotation.__origin__ in (list, typing.List):
                     is_list = True
-                    if hasattr(annotation, '__args__'):
+                    if hasattr(annotation, '__args__'):  # only applicable for older pythons
                         type = annotation.__args__[0]
                         if isinstance(type, typing.TypeVar):
-                            raise TypeError('List annotations must be typed (just "List" is not supported)')
+                            raise TypeError('List annotations must be typed (just "List" is not supported)')  # pragma: no cover
                     else:
                         raise TypeError('List annotations must be typed (just "List" is not supported)') # newer python
                 elif hasattr(annotation, '__origin__') and annotation.__origin__ in (dict, typing.Dict):
